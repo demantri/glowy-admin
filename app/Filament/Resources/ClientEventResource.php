@@ -27,6 +27,7 @@ class ClientEventResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationGroup = 'Event Management';
     protected static ?string $navigationLabel = 'Upload Client';
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
