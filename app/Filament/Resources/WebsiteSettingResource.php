@@ -20,8 +20,10 @@ class WebsiteSettingResource extends Resource
 {
     protected static ?string $model = WebsiteSetting::class;
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationLabel = 'Pengaturan Website';
+    protected static ?int $navigationSort = 7;
+
 
     public static function canCreate(): bool
     {

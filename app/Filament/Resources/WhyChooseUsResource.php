@@ -24,7 +24,7 @@ class WhyChooseUsResource extends Resource
 {
     protected static ?string $model = WhyChooseUs::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Event Management';
+    protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationLabel = 'Why Choose Us';
     protected static ?int $navigationSort = 2;
 

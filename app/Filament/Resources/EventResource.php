@@ -25,7 +25,7 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
-    protected static ?string $navigationGroup = 'Event Management';
+    protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationLabel = 'Upload Event';
     protected static ?int $navigationSort = 3;
 

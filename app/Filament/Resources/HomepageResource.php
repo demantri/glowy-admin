@@ -2,24 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WeddingResource\Pages;
-use App\Filament\Resources\WeddingResource\RelationManagers;
-use App\Models\Wedding\Portfolio;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Wedding\Homepage;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\HomepageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\HomepageResource\RelationManagers;
 
-class WeddingResource extends Resource
+class HomepageResource extends Resource
 {
-    protected static ?string $model = Portfolio::class;
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $model = Homepage::class;
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Wedding Organizer';
-    protected static ?string $navigationLabel = 'Upload Portfolio';
-    protected static ?int $navigationSort = 14;
+    protected static ?string $navigationLabel = 'Homepage';
+    protected static ?int $navigationSort = 11;
 
     public static function form(Form $form): Form
     {
@@ -32,10 +32,12 @@ class WeddingResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('image_path')
                             ->image()
-                            ->directory('portfolio'),
+                            ->directory('homepage')
+                            ->required(),
                         Forms\Components\TextInput::make('sort_order')->numeric(),
                     ])
                     ->orderable('sort_order')
+                    ->collapsed()
             ]);
     }
 
@@ -43,7 +45,8 @@ class WeddingResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('title')->searchable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime(),
             ])
             ->filters([
                 //
@@ -68,9 +71,9 @@ class WeddingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWeddings::route('/'),
-            'create' => Pages\CreateWedding::route('/create'),
-            'edit' => Pages\EditWedding::route('/{record}/edit'),
+            'index' => Pages\ListHomepages::route('/'),
+            'create' => Pages\CreateHomepage::route('/create'),
+            'edit' => Pages\EditHomepage::route('/{record}/edit'),
         ];
     }
 }

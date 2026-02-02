@@ -23,9 +23,9 @@ class ServiceItemResource extends Resource
 {
     protected static ?string $model = ServiceItem::class;
     protected static ?string $navigationLabel = 'Service Items';
-    protected static ?string $navigationGroup = 'Event Services';
+    protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {

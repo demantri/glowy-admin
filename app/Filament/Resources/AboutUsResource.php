@@ -24,7 +24,7 @@ class AboutUsResource extends Resource
 {
     protected static ?string $model = AboutUs::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Event Management';
+    protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationLabel = 'About Us';
     protected static ?int $navigationSort = 1;
 
