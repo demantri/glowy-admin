@@ -8,6 +8,8 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Wedding\Platform;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PlatformResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,6 +23,11 @@ class PlatformResource extends Resource
     protected static ?string $navigationLabel = 'Platform';
     protected static ?int $navigationSort = 15;
 
+    public static function canCreate(): bool
+    {
+        return Platform::count() < 1;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -29,6 +36,7 @@ class PlatformResource extends Resource
                 Forms\Components\Textarea::make('subtitle'),
                 Forms\Components\FileUpload::make('image_path')
                     ->image()
+                    ->columnSpanFull()
                     ->directory('platform'),
             ]);
     }
@@ -37,7 +45,20 @@ class PlatformResource extends Resource
     {
         return $table
             ->columns([
-                //
+                ImageColumn::make('image_path')
+                    ->label('Images')
+                    ->circular(),
+
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('subtitle')
+                    ->label('Subtitle')
+                    ->limit(200)
+                    ->searchable()
+                    ->sortable()
+                    ->wrap(),
             ])
             ->filters([
                 //

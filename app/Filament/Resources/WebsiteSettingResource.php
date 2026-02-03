@@ -27,7 +27,6 @@ class WebsiteSettingResource extends Resource
 
     public static function canCreate(): bool
     {
-        // Jika sudah ada 1 data di database, sembunyikan tombol "Create"
         return \App\Models\WebsiteSetting::count() < 1;
     }
 

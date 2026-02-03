@@ -25,6 +25,12 @@ class WeddingServicesResource extends Resource
     protected static ?string $navigationGroup = 'Wedding Organizer';
     protected static ?string $navigationLabel = 'Services';
     protected static ?int $navigationSort = 13;
+    protected static bool $shouldRegisterNavigation = false;
+
+    public static function canCreate(): bool
+    {
+        return Service::count() < 1;
+    }
 
     public static function form(Form $form): Form
     {

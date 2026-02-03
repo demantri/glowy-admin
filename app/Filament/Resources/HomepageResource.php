@@ -8,7 +8,13 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Wedding\Homepage;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\HasManyRepeater;
 use App\Filament\Resources\HomepageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\HomepageResource\RelationManagers;
@@ -21,23 +27,65 @@ class HomepageResource extends Resource
     protected static ?string $navigationLabel = 'Homepage';
     protected static ?int $navigationSort = 11;
 
+    public static function canCreate(): bool
+    {
+        return Homepage::count() < 1;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')->required(),
-                Forms\Components\Textarea::make('subtitle'),
-                Forms\Components\HasManyRepeater::make('images')
+                TextInput::make('title')
+                    ->required(),
+
+                Textarea::make('subtitle')
+                    ->required(),
+
+                // HasManyRepeater::make('images')
+                //     ->relationship()
+                //     ->schema([
+                //         FileUpload::make('image_path')
+                //             ->image()
+                //             ->directory('homepage')
+                //             ->columnSpan(2)
+                //             ->required(),
+
+                //         TextInput::make('sort_order')
+                //             ->numeric()
+                //             ->columnSpan(1),
+                //     ])
+                //     ->columns(3)
+                //     ->columnSpanFull(),
+
+                HasManyRepeater::make('images')
                     ->relationship()
+                    ->label('Gambar Homepage')
                     ->schema([
-                        Forms\Components\FileUpload::make('image_path')
+                        FileUpload::make('image_path')
+                            ->label('Gambar')
                             ->image()
                             ->directory('homepage')
+                            ->maxSize(2048) // 2MB
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeTargetWidth(1920)
+                            ->imageResizeTargetHeight(1080)
+                            ->imagePreviewHeight('150')
+                            ->columnSpan(2)
                             ->required(),
-                        Forms\Components\TextInput::make('sort_order')->numeric(),
+
+                        TextInput::make('sort_order')
+                            ->label('Urutan')
+                            ->numeric()
+                            ->default(1)
+                            ->columnSpan(1),
                     ])
+                    ->columns(3)
                     ->orderable('sort_order')
-                    ->collapsed()
+                    ->minItems(1)
+                    ->columnSpanFull(),
+
             ]);
     }
 
@@ -45,8 +93,22 @@ class HomepageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->searchable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime(),
+                ImageColumn::make('images.image_path')
+                    ->label('Images')
+                    ->stacked()
+                    ->limit(3)
+                    ->circular(),
+
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('subtitle')
+                    ->label('Subtitle')
+                    ->limit(250)
+                    ->searchable()
+                    ->sortable()
+                    ->wrap(),
             ])
             ->filters([
                 //

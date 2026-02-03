@@ -8,6 +8,9 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Wedding\Identity;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\IdentityResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,12 +24,17 @@ class IdentityResource extends Resource
     protected static ?string $navigationLabel = 'Identity';
     protected static ?int $navigationSort = 12;
 
+    public static function canCreate(): bool
+    {
+        return Identity::count() < 1;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')->required(),
-                Forms\Components\Textarea::make('subtitle'),
+                TextInput::make('title')->required(),
+                Textarea::make('subtitle'),
             ]);
     }
 
@@ -34,8 +42,14 @@ class IdentityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('subtitle'),
+                TextColumn::make('title'),
+
+                TextColumn::make('subtitle')
+                    ->label('Subtitle')
+                    ->limit(300)
+                    ->searchable()
+                    ->sortable()
+                    ->wrap(),
             ])
             ->filters([
                 //

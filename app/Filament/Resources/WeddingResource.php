@@ -2,16 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WeddingResource\Pages;
-use App\Filament\Resources\WeddingResource\RelationManagers;
-use App\Models\Wedding\Portfolio;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use App\Models\Wedding\Portfolio;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\HasManyRepeater;
+use App\Filament\Resources\WeddingResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\WeddingResource\RelationManagers;
 
 class WeddingResource extends Resource
 {
@@ -21,21 +27,31 @@ class WeddingResource extends Resource
     protected static ?string $navigationLabel = 'Upload Portfolio';
     protected static ?int $navigationSort = 14;
 
+    // public static function canCreate(): bool
+    // {
+    //     return Portfolio::count() < 1;
+    // }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')->required(),
-                Forms\Components\Textarea::make('subtitle'),
-                Forms\Components\HasManyRepeater::make('images')
+                TextInput::make('title')->required(),
+                Textarea::make('subtitle'),
+                HasManyRepeater::make('images')
                     ->relationship()
                     ->schema([
-                        Forms\Components\FileUpload::make('image_path')
+                        FileUpload::make('image_path')
                             ->image()
-                            ->directory('portfolio'),
-                        Forms\Components\TextInput::make('sort_order')->numeric(),
+                            ->directory('portfolio')
+                            ->columnSpan(2),
+
+                        TextInput::make('sort_order')
+                            ->numeric()
+                            ->columnSpan(1),
                     ])
-                    ->orderable('sort_order')
+                    ->columns(3)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -43,7 +59,22 @@ class WeddingResource extends Resource
     {
         return $table
             ->columns([
-                //
+                ImageColumn::make('images.image_path')
+                    ->label('Images')
+                    ->stacked()
+                    ->limit(3)
+                    ->circular(),
+
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('subtitle')
+                    ->label('Subtitle')
+                    ->limit(50)
+                    ->searchable()
+                    ->sortable()
+                    ->wrap(),
             ])
             ->filters([
                 //
