@@ -27,6 +27,15 @@ class ServiceCategoryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?int $navigationSort = 5;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
 
     public static function form(Form $form): Form
     {

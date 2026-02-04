@@ -24,10 +24,20 @@ use App\Filament\Resources\ClientEventResource\RelationManagers;
 class ClientEventResource extends Resource
 {
     protected static ?string $model = ClientEvent::class;
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationLabel = 'Upload Client';
     protected static ?int $navigationSort = 4;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
 
     public static function form(Form $form): Form
     {

@@ -24,6 +24,16 @@ class IdentityResource extends Resource
     protected static ?string $navigationLabel = 'Identity';
     protected static ?int $navigationSort = 12;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_wo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_wo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
     public static function canCreate(): bool
     {
         return Identity::count() < 1;

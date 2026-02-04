@@ -21,10 +21,20 @@ use App\Filament\Resources\WeddingSettingResource\RelationManagers;
 class WeddingSettingResource extends Resource
 {
     protected static ?string $model = WeddingSetting::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $navigationGroup = 'Wedding Organizer';
     protected static ?string $navigationLabel = 'Pengaturan Website';
     protected static ?int $navigationSort = 19;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_wo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_wo' || auth()->user()?->role?->description === 'superadmin';
+    }
 
     public static function canCreate(): bool
     {
@@ -42,7 +52,7 @@ class WeddingSettingResource extends Resource
                                 TextInput::make('company_name')
                                     ->required()
                                     ->maxLength(255),
-                                    
+
                                 Section::make('Branding Media')
                                     ->description('Kelola aset visual website')
                                     ->schema([

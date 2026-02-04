@@ -24,10 +24,20 @@ use App\Filament\Resources\EventResource\Pages;
 class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
-    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Event Organizer';
     protected static ?string $navigationLabel = 'Upload Event';
     protected static ?int $navigationSort = 3;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
 
     public static function form(Form $form): Form
     {

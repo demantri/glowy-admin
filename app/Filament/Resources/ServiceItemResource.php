@@ -24,8 +24,18 @@ class ServiceItemResource extends Resource
     protected static ?string $model = ServiceItem::class;
     protected static ?string $navigationLabel = 'Service Items';
     protected static ?string $navigationGroup = 'Event Organizer';
-    protected static ?string $navigationIcon = 'heroicon-o-check-circle';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?int $navigationSort = 6;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role?->description === 'admin_eo' || auth()->user()?->role?->description === 'superadmin';
+    }
 
     public static function form(Form $form): Form
     {
