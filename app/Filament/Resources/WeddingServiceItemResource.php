@@ -8,25 +8,23 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Wedding\Service;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
 use App\Models\Wedding\ServiceSection;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Wedding\WeddingServiceItem;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\WeddingServicesResource\Pages;
-use App\Filament\Resources\WeddingServicesResource\RelationManagers;
+use App\Filament\Resources\WeddingServiceItemResource\Pages;
+use App\Filament\Resources\WeddingServiceItemResource\RelationManagers;
 
-class WeddingServicesResource extends Resource
+class WeddingServiceItemResource extends Resource
 {
-    protected static ?string $model = Service::class;
+    protected static ?string $model = ServiceSection::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Wedding Organizer';
-    protected static ?string $navigationLabel = 'Service Item';
-    protected static ?int $navigationSort = 14;
+    protected static ?string $navigationLabel = 'Service Section';
+    protected static ?int $navigationSort = 13;
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -40,39 +38,21 @@ class WeddingServicesResource extends Resource
 
     public static function canCreate(): bool
     {
-        return Service::count() < 3;
+        return Service::count() < 1;
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Select::make('service_section_id')
-                    ->relationship('section', 'title')
-                    ->required()
-                    ->label('Service Section'),
-
                 TextInput::make('title')
                     ->required()
-                    ->label('Service Title'),
+                    ->label('Section Title'),
 
-                TextInput::make('icon')
-                    ->helperText('Contoh: heroicon-o-cog atau fa-solid fa-gear')
-                    ->label('Icon'),
+                Textarea::make('subtitle')
+                    ->label('Section Subtitle')
+                    ->rows(3),
 
-                Textarea::make('description')
-                    ->rows(4)
-                    ->label('Description'),
-
-                Toggle::make('is_recommend')
-                    ->label('Recommended')
-                    ->helperText('Tandai jika service ini direkomendasikan')
-                    ->default(false),
-
-                TextInput::make('sort_order')
-                    ->numeric()
-                    ->default(0)
-                    ->label('Sort Order'),
             ]);
     }
 
@@ -80,18 +60,11 @@ class WeddingServicesResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('icon'),
-
                 TextColumn::make('title'),
 
-                TextColumn::make('description')
-                    ->limit(50)
+                TextColumn::make('subtitle')
+                    ->limit(100)
                     ->wrap(),
-
-                ToggleColumn::make('is_recommend')
-                    ->label('Recommend'),
-
-                TextColumn::make('sort_order'),
             ])
             ->filters([
                 //
@@ -116,9 +89,9 @@ class WeddingServicesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWeddingServices::route('/'),
-            'create' => Pages\CreateWeddingServices::route('/create'),
-            'edit' => Pages\EditWeddingServices::route('/{record}/edit'),
+            'index' => Pages\ListWeddingServiceItems::route('/'),
+            'create' => Pages\CreateWeddingServiceItem::route('/create'),
+            'edit' => Pages\EditWeddingServiceItem::route('/{record}/edit'),
         ];
     }
 }

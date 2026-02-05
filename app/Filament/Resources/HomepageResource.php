@@ -52,22 +52,6 @@ class HomepageResource extends Resource
                 Textarea::make('subtitle')
                     ->required(),
 
-                // HasManyRepeater::make('images')
-                //     ->relationship()
-                //     ->schema([
-                //         FileUpload::make('image_path')
-                //             ->image()
-                //             ->directory('homepage')
-                //             ->columnSpan(2)
-                //             ->required(),
-
-                //         TextInput::make('sort_order')
-                //             ->numeric()
-                //             ->columnSpan(1),
-                //     ])
-                //     ->columns(3)
-                //     ->columnSpanFull(),
-
                 HasManyRepeater::make('images')
                     ->relationship()
                     ->label('Gambar Homepage')

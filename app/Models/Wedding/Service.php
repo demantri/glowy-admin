@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    protected $table = 'services';
+
     protected $fillable = [
-        'title',
-        'subtitle',
+        'service_section_id',
         'icon',
-        'header_services',
+        'title',
         'description',
         'is_recommend',
         'sort_order',
@@ -19,4 +20,9 @@ class Service extends Model
     protected $casts = [
         'is_recommend' => 'boolean',
     ];
+
+    public function section()
+    {
+        return $this->belongsTo(ServiceSection::class, 'service_section_id');
+    }
 }

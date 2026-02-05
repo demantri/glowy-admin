@@ -25,7 +25,7 @@ class WeddingResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Wedding Organizer';
     protected static ?string $navigationLabel = 'Upload Portfolio';
-    protected static ?int $navigationSort = 14;
+    protected static ?int $navigationSort = 15;
 
     public static function shouldRegisterNavigation(): bool
     {

@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\IdentityResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -43,8 +44,25 @@ class IdentityResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')->required(),
-                Textarea::make('subtitle'),
+                TextInput::make('title')
+                    ->required(),
+
+                // Textarea::make('subtitle'),
+                RichEditor::make('subtitle')
+                    ->label('Subtitle')
+                    ->toolbarButtons([
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strike',
+                        'bulletList',
+                        'orderedList',
+                        'link',
+                        'undo',
+                        'redo',
+                    ])
+                    ->columnSpanFull(),
+
             ]);
     }
 
